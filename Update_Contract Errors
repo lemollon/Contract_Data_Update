@@ -1,0 +1,35 @@
+UPDATE `bi-dev-55cf.sf4gcp.sf4gcp` AS t1
+SET 
+    start_date = t2.start_date,
+    end_date = t2.end_date,
+    contract_term = t2.contract_term,
+    status = t2.status,
+    status_code = t2.status_code,
+    flanders_org_name = t2.flanders_org_name,
+    name = t2.name,
+    type = t2.type
+FROM (
+    SELECT 
+        t2.start_date,
+        t2.end_date,
+        t2.contract_term,
+        t2.status,
+        t2.status_code,
+        t2.flanders_org_name,
+        t2.name,
+        t2.type,
+        t2.contract_number
+    FROM `bi-dev-55cf.sf4gcp.sf4gcp` AS t1
+    JOIN `bi-dev-55cf.sf4gcp.sf4gcp_2023_08_20` AS t2 -- Make sure to correct this table name if the slash is not intentional
+    ON t1.contract_number = t2.contract_number
+    WHERE 
+        t1.start_date != t2.start_date OR 
+        t1.end_date != t2.end_date OR
+        t1.contract_term != t2.contract_term OR
+        t1.status != t2.status OR
+        t1.status_code != t2.status_code OR
+        t1.flanders_org_name != t2.flanders_org_name OR
+        t1.name != t2.name OR
+        t1.type != t2.type
+) AS t2
+WHERE t1.contract_number = t2.contract_number;
